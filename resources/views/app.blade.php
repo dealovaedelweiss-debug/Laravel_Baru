@@ -165,13 +165,14 @@
 
 <body>
     <aside class="sidebar">
-        <div class="sidebar-brand">AdminPanel</div>
+        <div class="sidebar-brand">POS</div>
         <ul class="sidebar-menu">
             <li><a href="{{ url('dashboard') }}" class="active">Dashboard</a></li>
-            <li><a href="{{ url('role') }}">Roles</a></li>
+            <li><a href="{{ url('role') }}">Role</a></li>
             <li><a href="{{ url('product') }}">Products</a></li>
             <li><a href="{{ route('category.index') }}">Category</a></li>
-            <li><a href="{{ url('peserta') }}">Peserta</a></li>
+            {{-- <li><a href="{{ url('peserta') }}">Peserta</a></li> --}}
+            <li><a href="{{ url('order.index') }}">Transacion Order</a></li>
             {{-- <li><a href="{{ url('role') }}">Pengaturan</a></li> --}}
             <li><a href="{{ url('setting') }}">Setting</a></li>
         </ul>
