@@ -12,6 +12,7 @@ class CategoryController extends Controller
         $title = 'Data Category';
         $categories = Category::orderBy('name', 'asc')->get();
 
+        // UNTUK MENGAMBIL DATA PADA MODEL Category
         return view('category.index', compact('title', 'categories'));
     }
 

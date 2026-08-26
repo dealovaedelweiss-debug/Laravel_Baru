@@ -169,6 +169,7 @@
         <ul class="sidebar-menu">
             <li><a href="{{ url('dashboard') }}" class="active">Dashboard</a></li>
             <li><a href="{{ url('role') }}">Role</a></li>
+            <li><a href="{{ url('menu') }}">Menu</a></li>
             <li><a href="{{ url('product') }}">Products</a></li>
             <li><a href="{{ route('category.index') }}">Category</a></li>
             {{-- <li><a href="{{ url('peserta') }}">Peserta</a></li> --}}

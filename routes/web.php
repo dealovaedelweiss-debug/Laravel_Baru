@@ -4,6 +4,7 @@ use App\Http\Controllers\BelajarController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\LoginController;
+use App\Http\Controllers\MenuController;
 use App\Http\Controllers\OrderController;
 use App\Http\Controllers\PesertaController;
 use App\Http\Controllers\ProductController;
@@ -50,6 +51,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('product', ProductController::class);
     Route::resource('order', OrderController::class);
+    Route::resource('menu', MenuController::class);
 
     // LOGOUT
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');

@@ -2,9 +2,9 @@
     <html lang="en">
 
     <head>
-        <meta name="csrf-token" content="{{ csrf_token() }}">
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <meta name="csrf-token" content="{{ csrf_token() }}">
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet"
             integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
@@ -40,9 +40,7 @@
 
             .product-image img {
                 object-fit: contain;
-                aspect-ratio: 1 / 1;
                 width: 100%;
-                /* height: 100%; */
             }
 
             .price {
@@ -203,8 +201,8 @@
                                 <strong id="subtotal">Rp. 0</strong>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
-                                <span>Pajak (11%)</span>
-                                <strong id="tax" data-percent="11">Rp. 0</strong>
+                                <span>Pajak (10%)</span>
+                                <strong id="tax" data-percent="10">Rp. 0</strong>
                             </div>
                             <div class="d-flex justify-content-between mb-2">
                                 <span class="fw-bold">Total</span>
@@ -222,6 +220,40 @@
         <script>
             let cart = [];
 
+            async function processPayment() {
+                if (cart.length === 0) {
+                    alert('Cart is Empty')
+                    return;
+
+                    try {
+                        const respone = await fetch("{{ route('order.store') }}", {
+                            method: "POST",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "Accept": "application/json",
+                                "X-CSRF-TOKEN": document.querySelector('meta[name="csrf-token"]').getAttribute(
+                                    'content')
+                            },
+                            body: JSON.stringify({
+                                items: cart.map((item) => {
+                                    return {
+                                        id: item.id,
+                                        qty: item.qty
+                                    }
+                                }),
+                                payment_method: "cash"
+                            })
+                        })
+
+                        const result = await response.json();
+                        cart = [];
+                        displayCart();
+                        location.reload();
+                    } catch (error) {
+                        console.log(error);
+                    }
+                }
+            }
 
             function filterCategory(categoryId, button) {
                 const products = document.querySelectorAll('.product-item');
@@ -315,6 +347,7 @@
 
 
                 cartCount.innerText = `${cart.length}`;
+                console.log(cart.length);
 
                 let subTotalCount = 0;
                 const taxes = tax.dataset.percent / 100;
@@ -355,52 +388,21 @@
                 })
             }
 
+            const search = document.getElementById('searchProduct');
+
             function searchProduct() {
-                // alert('duar');
-                const search = document.getElementById('searchProduct').value.toLowerCase().trim();
+                const searchValue = search.value.toLowerCase().trim();
                 const products = document.querySelectorAll('.product-item');
 
-                products.forEach(function(product) {
+                products.forEach((product) => {
                     const productName = product.dataset.name.toLowerCase();
-                    //jika product name didalam table nilainya sama pada saat user input
-                    if (productName.includes(search)) {
+
+                    if (productName.includes(searchValue)) {
                         product.style.display = "";
                     } else {
                         product.style.display = "none";
                     }
-                })
-            }
-
-            async function processPayment() {
-                if (cart.lenght === 0) {
-                    alert('Cart is Empty')
-                    return;
-                }
-                try{
-                    const response = await fetch("{{ route('order.store') }}", {
-                        method: "POST",
-                        headers:{
-                            'Content-Type':'application/json',
-                            'Accept':'application/json',
-                            'X-CSRF-TOKEN':document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                        },
-                        body: JSON.stringify({
-                            items: cart.map(function(item){
-                                return{
-                                    id: item.id,
-                                    qty: item.qty
-                                }
-                            }),
-                            payment_method: "cash",
-                        })
-                    })
-                    const result = await response.json();
-                    cart = [];
-                    displayCart();
-                    location.reload();
-                }catch(error){
-                    console.log(error)
-                }
+                });
             }
         </script>
     </body>
