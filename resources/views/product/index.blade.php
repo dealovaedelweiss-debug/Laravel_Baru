@@ -11,6 +11,7 @@
                     <th>Name</th>
                     <th>Category Name</th>
                     <th>Price</th>
+                    <th>Stok</th>
                     <th>Description</th>
                     <th>Action</th>
                 </tr>
@@ -33,6 +34,7 @@
                         </td>
                         <td>{{ $value->category->name }}</td>
                         <td> Rp.{{ number_format($value->price) }}</td>
+                        <td> {{ ($value->qty) }}</td>
                         <td>{{ $value->description }}</td>
                         {{-- <td>{{ $value->is_active == 1 ? 'Active' : 'Disabled' }}</td> --}}
                         <td class="d-flex gap-3">

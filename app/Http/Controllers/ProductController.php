@@ -40,6 +40,7 @@ class ProductController extends Controller
             'name' => $request->name,
             'category_id' => $request->category_id,
             'price' => $request->price,
+            'qty' => $request->qty,
             'description' => $request->description,
         ];
         // jika user mengupload foto
@@ -70,19 +71,21 @@ class ProductController extends Controller
         $edit = Product::findOrFail($id);
 
         return view('product.edit', compact('title', 'categories', 'edit'));
-
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Product $product
+    public function update(
+        Request $request,
+        Product $product
 
     ) {
         $data = [
             'name' => $request->name,
             'category_id' => $request->category_id,
             'price' => $request->price,
+            'qty' => $request->qty,
             'description' => $request->description,
         ];
         if ($request->hasFile('photo')) {

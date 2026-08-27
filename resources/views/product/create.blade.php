@@ -20,6 +20,10 @@
             <input type="number" class="form-control" name="price">
         </div>
         <div class="mb-3">
+            <label for="" class="form-label">Stok</label>
+            <input type="number" class="form-control" name="qty">
+        </div>
+        <div class="mb-3">
             <label for="" class="form-label">Photo</label>
             <input type="file" class="form-control" name="photo">
         </div>

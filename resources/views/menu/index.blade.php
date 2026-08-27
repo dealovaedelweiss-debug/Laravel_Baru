@@ -2,7 +2,7 @@
 @section('content')
     <div class="table table-responsive">
         <div align="right" class="mb-3">
-            <a href="{{ route('menu.create') }}" class="btn btn-primary">Tambah Menu</a>
+            <a href="{{ route('role.create') }}" class="btn btn-primary">Add Menu</a>
         </div>
         <table class="table table-bordered">
             <thead>
@@ -18,7 +18,7 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $value->name }}</td>
-                        <td>{{ $value->is_active == 1 ? 'Active' : 'Disabled' }}</td>
+                        <td>{{ $value->is_active ? 'Enabled' : 'Disabled' }}</td>
                         <td class="d-flex gap-3">
                             <a href="{{ route('menu.edit', $value->id) }}" class="btn btn-success">Edit</a>
                             <form action="{{ route('menu.destroy', $value->id) }}" method="post">
