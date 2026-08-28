@@ -19,7 +19,9 @@ class OrderController extends Controller
      */
     public function index()
     {
-        return view('order.index');
+        $products = Product::all();
+
+        return view('order.index', compact('products'));
     }
 
     /**
@@ -45,7 +47,9 @@ class OrderController extends Controller
             'payment_method' => 'nullable|string',
         ]);
         try {
-            return DB::transaction(function () use ($request) {
+            $snapToken = null;
+            $orderId = null;
+            DB::transaction(function () use ($request, &$orderId, &$snapToken) {
                 $subtotal = 0;
                 $itemsData = [];
 
@@ -75,9 +79,11 @@ class OrderController extends Controller
                 $order = Order::create([
                     'order_code' => $orderCode,
                     'order_amount' => $total,
-                    'order_change' => 0,
+                    'order_change' => $request->order_change,
                     'order_status' => $paymentMethod === 'cash' ? 'success' : 'pending',
                 ]);
+
+                $orderId = $order->id;
                 // order detail
                 foreach ($itemsData as $data) {
                     OrderDetail::create([
@@ -93,7 +99,8 @@ class OrderController extends Controller
                 }
                 if ($paymentMethod === 'midtrans') {
                     Config::$serverKey = config('services.midtrans.server_key');
-                    Config::$isProduction = config('services.midtrans.is_production');
+                    Config::$clientKey = config('services.midtrans.client_key');
+                    Config::$isProduction = config('services.midtrans.is_production', false);
                     Config::$isSanitized = true;
                     Config::$is3ds = true;
 
@@ -109,21 +116,22 @@ class OrderController extends Controller
                     ];
 
                     $snapToken = Snap::getSnapToken($params);
-
-                    return response()->json([
-                        'success' => true,
-                        'payment_method' => 'midtrans',
-                        'snap_token' => $snapToken,
-                        'order_id' => $order->id,
-                    ]);
                 }
-
+            });
+            if ($request->payment_method === 'midtrans') {
                 return response()->json([
                     'success' => true,
-                    'paymentMethod' => 'cash',
-                    'order_id' => $order->id,
+                    'payment_method' => 'midtrans',
+                    'snap_token' => $snapToken,
+                    'order_id' => $orderId,
                 ]);
-            });
+            } else {
+                return response()->json([
+                    'success' => true,
+                    'payment_method' => 'cash',
+                    'order_id' => $orderId,
+                ]);
+            }
         } catch (Exception $th) {
             // kalau gagal
             return response()->json([

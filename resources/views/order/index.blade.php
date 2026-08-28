@@ -12,12 +12,13 @@
                     <th>Category Name</th>
                     <th>Price</th>
                     <th>Stok</th>
-                    <th>Description</th>
+                    <th>Order Code</th>
+                    <th>customer</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($product as $index => $value)
+                @foreach ($products as $index => $value)
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>
@@ -35,7 +36,8 @@
                         <td>{{ $value->category->name }}</td>
                         <td> Rp.{{ number_format($value->price) }}</td>
                         <td> {{($value->qty) }}</td>
-                        <td>{{ $value->description }}</td>
+                        <td>{{ $value->order_code }}</td>
+                        <td>{{ $value-> customerName }}</td>
                         {{-- <td>{{ $value->is_active == 1 ? 'Active' : 'Disabled' }}</td> --}}
                         <td class="d-flex gap-3">
                             <a href="{{ route('product.edit', $value->id) }}" class="btn btn-success">Edit</a>

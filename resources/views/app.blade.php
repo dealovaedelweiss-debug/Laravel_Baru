@@ -173,9 +173,14 @@
             <li><a href="{{ url('product') }}">Products</a></li>
             <li><a href="{{ route('category.index') }}">Category</a></li>
             {{-- <li><a href="{{ url('peserta') }}">Peserta</a></li> --}}
-            <li><a href="{{ url('order.index') }}">Transacion Order</a></li>
+            <li><a href="{{ route('order.index') }}">Transacion Order</a></li>
             {{-- <li><a href="{{ url('role') }}">Pengaturan</a></li> --}}
             <li><a href="{{ url('setting') }}">Setting</a></li>
+            <li><a href="#" onclick="event.preventDefault();
+            document.getElementById('logout').submit()">Log-Out</a></li>
+            <form action="{{ url('logout') }}" id="logout" method="post" class="d-none">
+                @csrf
+            </form>
         </ul>
     </aside>
 
