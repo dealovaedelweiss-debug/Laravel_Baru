@@ -45,19 +45,30 @@ Route::delete('peserta/delete/{id}', [PesertaController::class, 'delete'])->name
 // middleware : untuk menjaga server
 Route::middleware('auth')->group(function () {
     // dashbaord
-    Route::resource('dashboard', DashboardController::class);
+    // Route::resource('dashboard', DashboardController::class);
     // role crud
-    Route::resource('role', RoleController::class);
-    Route::resource('category', CategoryController::class);
-    Route::resource('product', ProductController::class);
-    Route::resource('order', OrderController::class);
-    Route::resource('menu', MenuController::class);
+
+    // Route::resource('menu', MenuController::class);
 
     // LOGOUT
     Route::post('logout', [LoginController::class, 'logout'])->name('logout');
+    // Menampilkan halaman form pengaturan
+    Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
 });
-// Menampilkan halaman form pengaturan
-Route::get('/setting', [SettingController::class, 'index'])->name('setting.index');
 
 // Memproses data yang di-submit dari form
 Route::post('/setting/update', [SettingController::class, 'update'])->name('setting.update');
+
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('admin/dashboard', [DashboardController::class, 'indexAdmin']);
+    Route::resource('role', RoleController::class);
+    Route::resource('category', CategoryController::class);
+    Route::resource('product', ProductController::class);
+});
+Route::middleware(['auth', 'kasir'])->group(function () {
+    Route::get('cashier/dashboard', [DashboardController::class, 'indexKasir']);
+    Route::resource('order', OrderController::class);
+});
+Route::middleware(['auth', 'pimpinan'])->group(function () {
+    Route::resource('dashboard', DashboardController::class);
+});

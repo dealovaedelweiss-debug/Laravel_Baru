@@ -93,7 +93,7 @@
         }
 
         @media print {
-            .container-fluid, .modal, .modal-backdrop {
+            .container-fluid, .modal, .modal-backdrop, #snap-midtrans {
                 display: none !important;
             }
 
@@ -329,7 +329,49 @@
     </div>
 
     <!-- ELEMEN INI WAJIB ADA SEBAGAI TEMPAT STRUK DICETAK -->
-    <div id="print-receipt"></div>
+    <div id="print-receipt">
+        <div style="text-align: center; margin-bottom: 5px;">
+                    <h3 style="margin: 0; font-size: 14px; font-weight: bold;">KOPI PPKD JAKARTA PUSAT</h3>
+                    <p style="margin: 0; font-size: 10px;">JL. KARET PASAR BARU BARAT</p>
+                    <p style="margin: 0; font-size: 10px;">NPWP: 01.234.567.8-910.000</p>
+                </div>
+
+                <div style="border-top: 1px dashed #000; margin: 5px 0;"></div>
+
+                <table style="width: 100%; font-size: 10px;">
+                    <tr>
+                        <td>Kasir : Admin</td>
+                        <td style="text-align: right;">${dateStr} ${timeStr}</td>
+                    </tr>
+                    <tr>
+                        <td>Plg   : ${customerName.toUpperCase() || 'UMUM'}</td>
+                        <td style="text-align: right;">INV/08/26/001</td>
+                    </tr>
+                </table>
+
+                <div style="border-top: 1px dashed #000; margin: 5px 0;"></div>
+
+                <table style="width: 100%; font-size: 11px; border-collapse: collapse;">
+                    ${itemsHtml}
+                </table>
+
+                <div style="border-top: 1px dashed #000; margin: 5px 0;"></div>
+
+                <table style="width: 100%; font-size: 11px;">
+                    <tr><td colspan="2">SUBTOTAL</td><td style="text-align: right">${rupiahFormat(subtotal)}</td></tr>
+                    <tr><td colspan="2">PPN (11%)</td><td style="text-align: right">${rupiahFormat(tax)}</td></tr>
+                    <tr><td colspan="2"><strong>TOTAL</strong></td><td style="text-align: right"><strong>${rupiahFormat(grandTotal)}</strong></td></tr>
+                    <tr><td colspan="3" style="padding: 2px 0;"></td></tr> <!-- Spasi kosong -->
+                    ${paymentHtml}
+                </table>
+
+                <div style="border-top: 1px dashed #000; margin: 5px 0;"></div>
+
+                <div style="text-align: center; font-size: 10px; margin-top: 5px;">
+                    <p style="margin: 2px 0;">TERIMA KASIH ATAS KUNJUNGAN ANDA</p>
+                    {{-- <p style="margin: 2px 0;">LAYANAN KONSUMEN: 0812-3456-7890</p> --}}
+                </div>
+    </div>
 
     <script>
         let cart = [];
@@ -452,10 +494,15 @@
                 if (result.payment_method === "midtrans") {
                     window.snap.pay(result.snap_token, {
                         onSuccess: function(result) {
-                            alert("payment success!");
-                            printReceipt(customerName, "midtrans", 0, 0);
-                            cart = [];
-                            displayCart();
+                            if(result.transaction_status === 'settlement' || result.transaction_status === 'capture'){
+                                alert("payment success!");
+                                printReceipt(customerName, "midtrans", 0, 0);
+                                cart = [];
+                                displayCart();
+                                document.getElementById('customer_name').value = '';
+                            }else{
+                                alert("Pembayaran diterima dengan status: " + result.transaction_status);
+                            }
                             console.log(result);
                         },
                         onPending: function(result) {
@@ -535,7 +582,7 @@
                     <tr><td colspan="2">TUNAI</td><td style="text-align: right">${rupiahFormat(cashPaid)}</td></tr>
                     <tr><td colspan="2">KEMBALIAN</td><td style="text-align: right">${rupiahFormat(changeMoney)}</td></tr>
                 `;
-            } else {
+            } else if (paymentMethod === 'midtrans') {
                 paymentHtml = `
                     <tr><td colspan="3" style="text-align: right; padding-top:5px;"><strong>DIBAYAR VIA E-WALLET/QRIS</strong></td></tr>
                 `;
@@ -546,7 +593,6 @@
                 <div style="text-align: center; margin-bottom: 5px;">
                     <h3 style="margin: 0; font-size: 14px; font-weight: bold;">KOPI PPKD JAKARTA PUSAT</h3>
                     <p style="margin: 0; font-size: 10px;">JL. KARET PASAR BARU BARAT</p>
-                    <p style="margin: 0; font-size: 10px;">NPWP: 01.234.567.8-910.000</p>
                 </div>
 
                 <div style="border-top: 1px dashed #000; margin: 5px 0;"></div>
@@ -582,7 +628,6 @@
 
                 <div style="text-align: center; font-size: 10px; margin-top: 5px;">
                     <p style="margin: 2px 0;">TERIMA KASIH ATAS KUNJUNGAN ANDA</p>
-                    <p style="margin: 2px 0;">LAYANAN KONSUMEN: 0812-3456-7890</p>
                 </div>
             `;
 

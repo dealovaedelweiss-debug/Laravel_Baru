@@ -167,17 +167,29 @@
     <aside class="sidebar">
         <div class="sidebar-brand">POS</div>
         <ul class="sidebar-menu">
-            <li><a href="{{ url('dashboard') }}" class="active">Dashboard</a></li>
-            <li><a href="{{ url('role') }}">Role</a></li>
-            <li><a href="{{ url('menu') }}">Menu</a></li>
-            <li><a href="{{ url('product') }}">Products</a></li>
-            <li><a href="{{ route('category.index') }}">Category</a></li>
-            {{-- <li><a href="{{ url('peserta') }}">Peserta</a></li> --}}
-            <li><a href="{{ route('order.index') }}">Transacion Order</a></li>
-            {{-- <li><a href="{{ url('role') }}">Pengaturan</a></li> --}}
-            <li><a href="{{ url('setting') }}">Setting</a></li>
-            <li><a href="#" onclick="event.preventDefault();
-            document.getElementById('logout').submit()">Log-Out</a></li>
+            @if (Auth::user()->role_id == 3)
+                <li><a href="{{ url('dashboard') }}" class="active">Dashboard</a></li>
+                <li><a href="{{ url('setting') }}">Setting</a></li>
+                <li><a href="{{ url('role') }}">Role</a></li>
+
+            @elseif (Auth::user()->role_id == 2)
+                <li><a href="{{ url('cashier/dashboard') }}" class="active">Dashboard</a></li>
+                <li><a href="{{ route('order.index') }}">Transacion Order</a></li>
+            @else
+                <li><a href="{{ url('admin/dashboard') }}" class="active">Dashboard</a></li>
+                <li><a href="{{ url('role') }}">Role</a></li>
+                {{-- <li><a href="{{ url('menu') }}">Menu</a></li> --}}
+                <li><a href="{{ url('product') }}">Products</a></li>
+                <li><a href="{{ route('category.index') }}">Category</a></li>
+                {{-- <li><a href="{{ url('peserta') }}">Peserta</a></li> --}}
+
+                {{-- <li><a href="{{ url('role') }}">Pengaturan</a></li> --}}
+                <li><a href="{{ url('setting') }}">Setting</a></li>
+            @endif
+            <li><a href="#"
+                    onclick="event.preventDefault();
+            document.getElementById('logout').submit()">Log-Out</a>
+            </li>
             <form action="{{ url('logout') }}" id="logout" method="post" class="d-none">
                 @csrf
             </form>

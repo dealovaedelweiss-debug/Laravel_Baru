@@ -45,9 +45,23 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-                                <button class="btn btn-primary w-100 fw-semibold" type="submit">
-                                    Sign in
-                                </button>
+                               @guest
+                                    <button type="submit" class="btn btn-primary w-100 fw-semibold">
+                                        Login
+                                    </button>
+                                @else
+                                    @php
+                                        $dashboardUrl = match (Auth::user()->role_id) {
+                                            1 => url('admin/dashboard'),
+                                            2 => url('cashier/dashboard'),
+                                            default => url('dashboard'),
+                                        };
+                                    @endphp
+
+                                    <a href="{{ $dashboardUrl }}" class="btn btn-success w-100 fw-semibold">
+                                        Dashboard
+                                    </a>
+                                @endguest
                             </form>
                         </div>
                     </div>
