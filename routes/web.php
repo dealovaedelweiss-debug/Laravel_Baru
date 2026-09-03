@@ -64,6 +64,7 @@ Route::middleware(['auth', 'admin'])->group(function () {
     Route::resource('role', RoleController::class);
     Route::resource('category', CategoryController::class);
     Route::resource('product', ProductController::class);
+
 });
 Route::middleware(['auth', 'kasir'])->group(function () {
     Route::get('cashier/dashboard', [DashboardController::class, 'indexKasir']);

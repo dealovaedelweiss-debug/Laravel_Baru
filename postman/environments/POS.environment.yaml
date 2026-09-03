@@ -1,0 +1,8 @@
+name: POS
+values:
+  - key: local
+    value: ''
+  - key: prod
+    value: ''
+  - key: token
+    value: ''

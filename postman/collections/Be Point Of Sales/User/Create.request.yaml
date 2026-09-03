@@ -1,0 +1,22 @@
+$kind: http-request
+url: "{{local}}/user"
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: "{\r
+
+    \    \"name\":\"loppy\",\r
+
+    \    \"email\":\"loppy@gmail.com\",\r
+
+    \    \"password\": \"12345678\"\r
+
+    }"
+auth:
+  type: bearer
+  credentials:
+    token: "{{token}}"
+order: 2735899870919548

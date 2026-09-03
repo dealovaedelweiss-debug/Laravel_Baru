@@ -170,7 +170,7 @@
             @if (Auth::user()->role_id == 3)
                 <li><a href="{{ url('dashboard') }}" class="active">Dashboard</a></li>
                 <li><a href="{{ url('setting') }}">Setting</a></li>
-                <li><a href="{{ url('role') }}">Role</a></li>
+                {{-- <li><a href="{{ url('role') }}">Role</a></li> --}}
 
             @elseif (Auth::user()->role_id == 2)
                 <li><a href="{{ url('cashier/dashboard') }}" class="active">Dashboard</a></li>

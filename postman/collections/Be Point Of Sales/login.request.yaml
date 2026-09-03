@@ -1,0 +1,16 @@
+$kind: http-request
+url: "{{local}}/login"
+method: POST
+headers:
+  Accept: application/json
+  Content-Type: application/json
+body:
+  type: json
+  content: "{\r
+
+    \    \"email\":\"admin@gmail.com\",\r
+
+    \    \"password\":\"12345678\"\r
+
+    }"
+order: 1788418175229
